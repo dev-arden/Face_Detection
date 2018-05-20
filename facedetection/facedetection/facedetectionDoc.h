@@ -1,4 +1,4 @@
-
+#define WIDTHBYTES(bits) (((bits)+31)/32*4)
 // facedetectionDoc.h : CfacedetectionDoc 클래스의 인터페이스
 //
 
