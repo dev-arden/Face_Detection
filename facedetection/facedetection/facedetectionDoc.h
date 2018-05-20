@@ -17,6 +17,17 @@ public:
 
 // 작업입니다.
 public:
+	int ImgType;
+	int height, width;
+	RGBQUAD palRGB[256];
+	BITMAPINFOHEADER dibHi;
+	BITMAPFILEHEADER dibHf;
+
+	BYTE *m_InImg, *m_OutImg;
+	BYTE *m_GrayImg, *m_GrayImg2;
+	BYTE *m_R, *m_G, *m_B;
+	BYTE *m_CpyImg;
+	int *m_mRGB;
 
 // 재정의입니다.
 public:
@@ -45,4 +56,9 @@ protected:
 	// 검색 처리기에 대한 검색 콘텐츠를 설정하는 도우미 함수
 	void SetSearchContent(const CString& value);
 #endif // SHARED_HANDLERS
+public:
+	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
+//	void CopyClipboard();
+	virtual void CopyClipboard(BYTE* m_CpyImg, int height, int width, int biBitCount);
+	void OnFacedetection();
 };

@@ -253,4 +253,9 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="facedetection.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

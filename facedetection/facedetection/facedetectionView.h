@@ -17,6 +17,10 @@ public:
 
 // 작업입니다.
 public:
+	int rwsize;
+	int height;
+	int width;
+	BITMAPINFO *BmInfo;
 
 // 재정의입니다.
 public:
@@ -43,6 +47,8 @@ protected:
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnFacedetection();
 };
 
 #ifndef _DEBUG  // facedetectionView.cpp의 디버그 버전

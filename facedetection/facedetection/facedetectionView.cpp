@@ -28,6 +28,7 @@ BEGIN_MESSAGE_MAP(CfacedetectionView, CView)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CfacedetectionView::OnFilePrintPreview)
 	ON_WM_CONTEXTMENU()
 	ON_WM_RBUTTONUP()
+	ON_COMMAND(ID_FACEDETECTION, &CfacedetectionView::OnFacedetection)
 END_MESSAGE_MAP()
 
 // CfacedetectionView 생성/소멸
@@ -36,10 +37,17 @@ CfacedetectionView::CfacedetectionView()
 {
 	// TODO: 여기에 생성 코드를 추가합니다.
 
+	BmInfo = (BITMAPINFO*)malloc(sizeof(BITMAPINFO) + 256 * sizeof(RGBQUAD));
+	for (int i = 0; i<256; i++)
+	{
+		BmInfo->bmiColors[i].rgbRed = BmInfo->bmiColors[i].rgbGreen = BmInfo->bmiColors[i].rgbBlue = i;
+		BmInfo->bmiColors[i].rgbReserved = 0;
+	}
 }
 
 CfacedetectionView::~CfacedetectionView()
 {
+	if (BmInfo) delete BmInfo;
 }
 
 BOOL CfacedetectionView::PreCreateWindow(CREATESTRUCT& cs)
@@ -52,7 +60,7 @@ BOOL CfacedetectionView::PreCreateWindow(CREATESTRUCT& cs)
 
 // CfacedetectionView 그리기
 
-void CfacedetectionView::OnDraw(CDC* /*pDC*/)
+void CfacedetectionView::OnDraw(CDC* pDC)
 {
 	CfacedetectionDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
@@ -60,6 +68,13 @@ void CfacedetectionView::OnDraw(CDC* /*pDC*/)
 		return;
 
 	// TODO: 여기에 원시 데이터에 대한 그리기 코드를 추가합니다.
+	if (pDoc->m_InImg == NULL) return;
+	height = pDoc->dibHi.biHeight;
+	width = pDoc->dibHi.biWidth;
+	rwsize = WIDTHBYTES(pDoc->dibHi.biBitCount*pDoc->dibHi.biWidth);
+	BmInfo->bmiHeader = pDoc->dibHi;
+	SetDIBitsToDevice(pDC->GetSafeHdc(), 0, 0, width, height,
+		0, 0, 0, height, pDoc->m_InImg, BmInfo, DIB_RGB_COLORS);
 }
 
 
@@ -125,3 +140,16 @@ CfacedetectionDoc* CfacedetectionView::GetDocument() const // 디버그되지 않은 버
 
 
 // CfacedetectionView 메시지 처리기
+
+
+void CfacedetectionView::OnFacedetection()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CfacedetectionDoc* pDoc = GetDocument(); // Doc 클래스참조
+	ASSERT_VALID(pDoc);
+	pDoc->OnFacedetection(); // 함수호출
+	pDoc->CopyClipboard(pDoc->m_OutImg, pDoc->dibHi.biHeight, pDoc->dibHi.biWidth, 24);
+	//<== 독립된Doc.(윈도우)를열어서, Bit맵정보와데이터를출력버퍼에복사함//
+	//<== 최종Bit수는입력Buffer와같게해주어야함//
+	AfxGetMainWnd()->SendMessage(WM_COMMAND, ID_FILE_NEW);
+}
