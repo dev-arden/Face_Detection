@@ -10,9 +10,11 @@
 #endif
 
 #include "facedetectionDoc.h"
+#include <stack>
+#include "Dib.h"
+
 
 #include <propkey.h>
-
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -270,6 +272,8 @@ void CfacedetectionDoc::CopyClipboard(BYTE* m_CpyImg, int height, int width, int
 }
 
 
+
+
 void CfacedetectionDoc::OnFacedetection()
 {
 	/*
@@ -317,4 +321,71 @@ void CfacedetectionDoc::OnFacedetection()
 			}
 		}
 	}
+}
+
+/*
+void CfacedetectionDoc::OnLabeling(BYTE *m_OutImg)
+{
+	
+	std::stack <int> st;
+
+	int labelNumber = 0;
+	for (int y = 1; y < height - 1; y++) {
+		for (int x = 1; x < width - 1; x++) {
+			// source image가 255일 경우 + Labeling 수행되지 않은 픽셀에서만 labeling process 시작
+			if (m_OutImg[width * y + x] != 0) continue;
+
+			labelNumber++;
+
+			// 새로운 label seed를 stack에 push
+			st.push(x);
+			st.push(y);
+
+			// 해당 label seed가 labeling될 때(stack이 빌 때) 까지 수행
+			while (!st.empty()) {
+				// stack top의 label point를 받고 pop
+				int ky = st.top();
+				int kx = st.top();
+				st.pop();
+
+				// label seed의 label number를 result image에 저장
+				m_OutImg[width * ky + kx] = labelNumber;
+
+				// search 8-neighbor
+				for (int ny = ky - 1; ny <= ky + 1; ny++) {
+					// y축 범위를 벗어나는 점 제외
+					if (ny < 0 || ny >= height) continue;
+					for (int nx = kx - 1; nx <= kx + 1; nx++) {
+						// x축 범위를 벗어나는 점 제외
+						if (nx < 0 || nx >= width) continue;
+
+						// source image가 값이 있고 labeling이 안된 좌표를 stack에 push
+						if (m_OutImg[width * ny + nx] != 0) continue;
+						st.push(nx);
+						st.push(ny);
+
+						// 탐색한 픽셀이니 labeling
+						m_OutImg[width * ny + nx] = labelNumber;
+					}
+				}
+			}
+		}
+	}
+
+	// dst image에 복사
+	//for (int y = 0; y < height; y++) {
+		//for (int x = 0; x < width; x++) {
+			//dst->imageData[width * y + x] = m_OutImg[width * y + x];
+		//}
+	//}
+
+	// 메모리 해제
+	//delete[] resultImage;
+}
+*/
+
+
+void CfacedetectionDoc::OnLabeling()
+{
+	
 }

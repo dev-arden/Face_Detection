@@ -49,6 +49,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnFacedetection();
+	afx_msg void OnLabeling();
 };
 
 #ifndef _DEBUG  // facedetectionView.cpp의 디버그 버전

@@ -29,6 +29,7 @@ BEGIN_MESSAGE_MAP(CfacedetectionView, CView)
 	ON_WM_CONTEXTMENU()
 	ON_WM_RBUTTONUP()
 	ON_COMMAND(ID_FACEDETECTION, &CfacedetectionView::OnFacedetection)
+	ON_COMMAND(ID_LABELING, &CfacedetectionView::OnLabeling)
 END_MESSAGE_MAP()
 
 // CfacedetectionView 생성/소멸
@@ -148,6 +149,19 @@ void CfacedetectionView::OnFacedetection()
 	CfacedetectionDoc* pDoc = GetDocument(); // Doc 클래스참조
 	ASSERT_VALID(pDoc);
 	pDoc->OnFacedetection(); // 함수호출
+	pDoc->CopyClipboard(pDoc->m_OutImg, pDoc->dibHi.biHeight, pDoc->dibHi.biWidth, 24);
+	//<== 독립된Doc.(윈도우)를열어서, Bit맵정보와데이터를출력버퍼에복사함//
+	//<== 최종Bit수는입력Buffer와같게해주어야함//
+	AfxGetMainWnd()->SendMessage(WM_COMMAND, ID_FILE_NEW);
+}
+
+
+void CfacedetectionView::OnLabeling()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CfacedetectionDoc* pDoc = GetDocument(); // Doc 클래스참조
+	ASSERT_VALID(pDoc);
+	pDoc->OnLabeling(); // 함수호출
 	pDoc->CopyClipboard(pDoc->m_OutImg, pDoc->dibHi.biHeight, pDoc->dibHi.biWidth, 24);
 	//<== 독립된Doc.(윈도우)를열어서, Bit맵정보와데이터를출력버퍼에복사함//
 	//<== 최종Bit수는입력Buffer와같게해주어야함//

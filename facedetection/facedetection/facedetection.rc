@@ -303,6 +303,7 @@ BEGIN
     POPUP "face"
     BEGIN
         MENUITEM "facedetection",               ID_FACEDETECTION
+        MENUITEM "labeling",                    ID_LABELING
     END
 END
 

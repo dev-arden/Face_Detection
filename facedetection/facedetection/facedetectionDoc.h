@@ -61,4 +61,6 @@ public:
 //	void CopyClipboard();
 	virtual void CopyClipboard(BYTE* m_CpyImg, int height, int width, int biBitCount);
 	void OnFacedetection();
+	void OnLabeling(BYTE *m_OutImg);
+	void OnLabeling();
 };
